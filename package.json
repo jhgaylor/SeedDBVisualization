@@ -20,6 +20,7 @@
     "SeedDBCommands": "git+https://github.com/jhgaylor/SeedDBCommands",
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
+    "jade": "^1.9.2",
     "morgan": "^1.5.2"
   },
   "devDependencies": {
