@@ -28,7 +28,7 @@ app.use('/', BaseRouter);
 app.use('/api', APIRouter);
 
 // serve static assets
-app.use('/static', express.static('static'));
+app.use('/static', express.static('./client/static'));
 
 // give the environment a chance to set the port explicitly or default to 3000
 var PORT = 3000;
