@@ -15,3 +15,11 @@ npm install
 bower install
 grunt
 ```
+
+
+# add bower components
+
+```sh
+bower install <component>
+grunt # recompile assets
+```
