@@ -5,8 +5,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     bower_concat: {
       all: {
-        dest: 'static/_bower.js',
-        cssDest: 'static/_bower.css',
+        dest: 'client/static/_bower.js',
+        cssDest: 'client/static/_bower.css',
       }
     }
   })
