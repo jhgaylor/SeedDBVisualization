@@ -1,4 +1,8 @@
-// console.log("Bower is ready", $, d3);
+// Some sites that helped
+// https://github.com/mbostock/d3/wiki/Pie-Layout
+// https://github.com/mbostock/d3/wiki/SVG-Shapes
+// http://bl.ocks.org/mbostock/3887193
+// https://github.com/mbostock/d3/wiki/Ordinal-Scales
 
 // models here just gives the data from the API some methods.
 // there is no writing/modifying so this can be really simple
@@ -16,7 +20,11 @@ var Models = {
         }
         var accelerator_id = this.seeddb_url.split("=")[1];
         return APIWrapper.getAcceleratorCompanies(accelerator_id);
-      }
+      },
+      // sets a property at run time
+      fundingNumber: (function () {
+        return Number(obj.funding.replace(/,/g, ''));
+      })()
     });
   },
   company: function (obj) {
