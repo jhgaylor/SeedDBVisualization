@@ -15,15 +15,31 @@ var APIWrapper = {
     return def.promise;
   },
   getAccelerators: function () {
-    var p = this.get('/accelerators');
-    console.log(p);
-    return p;
+    // returns a promise for the array of accelerator models
+    return this.get('/accelerators')
+      .then(function (accelerators) {
+        return accelerators.map(function (accelerator) {
+          return Models.accelerator(accelerator);
+        });
+      });
   },
   getAcceleratorCompanies: function (acceleratorId) {
-    return this.get('/accelerators/'+acceleratorId);
+    // returns a promise for the array of company models
+    return this.get('/accelerators/'+acceleratorId)
+      .then(function (companies) {
+        return companies.map(function (company) {
+          return Models.company(company);
+        });
+      });
   },
   getExits: function (company) {
-    return this.get('/exits');
+    // returns a promise for the array of company models
+    return this.get('/exits')
+      .then(function (companies) {
+        return companies.map(function (company) {
+          return Models.company(company);
+        });
+      });
   }
 };
 
