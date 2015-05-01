@@ -7,10 +7,15 @@ var Models = {
   accelerator: function (obj) {
     // in this order, we're injecting the 2nd object into the original `obj` and returning it.
     return _.extend(obj, {
+      _companies: null, // cache api results
       // returns a promise for the companies of this accelerator
       getCompanies: function () {
-        // TODO: ensure we have access to the properies of obj here as `this`
-        return "1";
+        // returned the cached value if it exists
+        if (this._companies) {
+          return this._companies;
+        }
+        var accelerator_id = this.seeddb_url.split("=")[1];
+        return APIWrapper.getAcceleratorCompanies(accelerator_id);
       }
     });
   },
