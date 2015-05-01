@@ -165,5 +165,80 @@ var APIWrapper = {
   });
 });//(); // the first comment on this line prevents the examples from running
 
-// draw the appropriate visualization - use routing?
+// Render the d3 visualization of accelerators' fund size
+$(document).ready(function () {
+
+  // find if the screen is limited by height or width and set both the svg's height and width to the largest contraint to allow for scrolling either horizontally or vertically depending on screen realestate.
+  var largestContainer = _.max([$('#accelerator_visualization').height(), $('#accelerator_visualization').width()])
+  var svgWidth = largestContainer;
+  var svgHeight = largestContainer;
+  var svgRadius = Math.min(svgWidth, svgHeight) / 2;
+  // an array of hex values. (ordinal scale)
+  var color = d3.scale.category10();
+
+  // create a function that can convert a set of accelerators
+  // into the start and end angles needed.
+  var pie = d3.layout.pie()
+    .value(function (datum) { return datum.fundingNumber; })
+  // insert the svg into the body
+  var svg = d3.select("#accelerator_visualization").append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
+  // move the origin over and down half the size of the visualization
+  // basically this puts the top and left sides at the top left of it's container
+  // instead of the origin at the top left
+  .append("g")
+    .attr("transform", "translate(" + svgWidth / 2 + "," + svgHeight / 2 + ")");
+
+  // the general idea is to render 6 donuts, each subsequently larger in radius
+  // and further from the center.
+
+  // Grab the accelerators models
+  APIWrapper.getAccelerators().then(function (accelerators) {
+    // Break the accelerators into brackets
+    var brackets = Slicers.a_funding_brackets(accelerators);
+    // console.log(brackets)
+    // the distance between inner and outer radius
+    // which is totalRadius/numberOfBrackets
+    var numberOfBrackets = _.keys(brackets).length;
+    var totalAvailableRadius = svgRadius-2;
+    var arc_width = totalAvailableRadius/numberOfBrackets
+    // render each bracket into a donut. the index of the bracket
+    // indicates where the donut should be drawn (0 is inner most)
+    _.each(brackets, function (bracket, key) {
+      var keyNumber = Number(key);
+      // get the bracket accelerators into the proper form
+      // which is pairs of name, and funding. this will be fed to d3.layout.pie
+      // which (i believe) is where i'll bind click events?
+      var outerRadius = (keyNumber+1)*arc_width+2;
+      var innerRadius = keyNumber*arc_width+2;
+      // console.log(keyNumber, outerRadius, innerRadius)
+      var arc = d3.svg.arc()
+        .outerRadius(outerRadius)
+        .innerRadius(innerRadius);
+
+      var svgGroup = svg.selectAll('.funding-arc'+key)
+        .data(pie(bracket))
+        .enter().append("g")
+          .attr('class', "arc funding-arc"+key)
+
+      // create the path of the arc for each datum
+      svgGroup.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) { return color(keyNumber); });
+
+      // add the label
+      svgGroup.append("text")
+        // move the label to the center of the arc, instead of the origin of the visualization
+        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+        // shift the content on the y axis
+        .attr("dy", ".35em")
+        // anchor the text to the middle of the arc
+        .style("text-anchor", "middle")
+        // set the text from the data
+        .text(function(d) { return d.data.name; });
+    });
+  });
+});
+
 // click events on visualization
