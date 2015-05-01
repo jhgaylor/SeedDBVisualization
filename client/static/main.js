@@ -126,6 +126,8 @@ var APIWrapper = {
 (function () {
   APIWrapper.getAccelerators().then(function (accelerators) {
     console.log("Accelerators", accelerators);
+    var brackets = Slicers.a_funding_brackets(accelerators);
+    console.log("brackets", brackets);
   })
   .catch(function(err) {
     console.log(err);
@@ -140,6 +142,15 @@ var APIWrapper = {
 
   APIWrapper.getExits().then(function (companies) {
     console.log("exits", companies);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+
+  APIWrapper.getAccelerators().then(function (accelerators) {
+    accelerators[0].getCompanies().then(function (companies) {
+      console.log(companies);
+    })
   })
   .catch(function(err) {
     console.log(err);
