@@ -22,7 +22,59 @@ var Models = {
   company: function (obj) {
     return _.extend(obj, {
 
-    })
+    });
+  }
+};
+
+// a hash table of views of data. Essentially, it is a collection
+// of methods that can take a set of either accelerators or companies
+// (depending on the slicer) and returns a new arrangement of the data
+var Slicers = {
+  // returns a hashtable of {bracket_name: [accelerators]}
+  // where brackets are:
+  //    "1B+": >$1B
+  //    "100M-1B": >$100M<$1B
+  //    "25M-100M": >$25M<$100M
+  //    "10M-25M": >$10M<$25M
+  //    "2M-10M": >$2M<$10M
+  //    "2M-": <$2M
+  a_funding_brackets: function (accelerators) {
+    var brackets = {
+      "1B+": [],
+      "100M-1B": [],
+      "25M-100M": [],
+      "10M-25M": [],
+      "2M-10M": [],
+      "2M-": [],
+    };
+    function numberToBracketKey (num) {
+      if (num >= 1000000000) {
+        return "1B+";
+      } else if (num >= 100000000) {
+        return "100M-1B";
+      } else if (num >= 25000000) {
+        return "25M-100M";
+      } else if (num >= 10000000) {
+        return "10M-25M";
+      } else if (num >= 2000000) {
+        return "2M-10M";
+      } else {
+        return "2M-";
+      }
+    }
+    accelerators.forEach(function (accelerator) {
+      // console.log(accelerator.funding);
+      // console.log(accelerator.funding.replace(/,/g, ''));
+      // console.log(accelerator.funding);
+      var funding = Number(accelerator.funding.replace(/,/g, ''));
+      // don't display accelerators that haven't funded anything.
+      if (funding < 1) {
+        return;
+      }
+      var key = numberToBracketKey(funding);
+      brackets[key].push(accelerator);
+    });
+    return brackets;
   }
 }
 
