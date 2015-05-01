@@ -1,5 +1,27 @@
 // console.log("Bower is ready", $, d3);
 
+// models here just gives the data from the API some methods.
+// there is no writing/modifying so this can be really simple
+// and is definitely not an ORM.
+var Models = {
+  accelerator: function (obj) {
+    // in this order, we're injecting the 2nd object into the original `obj` and returning it.
+    return _.extend(obj, {
+      // returns a promise for the companies of this accelerator
+      getCompanies: function () {
+        // TODO: ensure we have access to the properies of obj here as `this`
+        return "1";
+      }
+    });
+  },
+  company: function (obj) {
+    return _.extend(obj, {
+
+    })
+  }
+}
+
+// a client side consumer of the API wrapping SeedDBCommands
 var APIWrapper = {
   base_url: "http://localhost:3000/api",
   get: function (url_partial) {
