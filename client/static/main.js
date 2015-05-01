@@ -54,6 +54,7 @@ var Slicers = {
       3: [],
       4: [],
       5: [],
+      6: [],
     };
     function numberToBracketKey (num) {
       if (num >= 1000000000) {
@@ -66,8 +67,10 @@ var Slicers = {
         return 3;
       } else if (num >= 2000000) {
         return 4;
-      } else {
+      } else if (num >= 500000) {
         return 5;
+      } else {
+        return 6;
       }
     }
     accelerators.forEach(function (accelerator) {
@@ -207,9 +210,6 @@ $(document).ready(function () {
     // indicates where the donut should be drawn (0 is inner most)
     _.each(brackets, function (bracket, key) {
       var keyNumber = Number(key);
-      // get the bracket accelerators into the proper form
-      // which is pairs of name, and funding. this will be fed to d3.layout.pie
-      // which (i believe) is where i'll bind click events?
       var outerRadius = (keyNumber+1)*arc_width+2;
       var innerRadius = keyNumber*arc_width+2;
       // console.log(keyNumber, outerRadius, innerRadius)
@@ -226,7 +226,6 @@ $(document).ready(function () {
       svgGroup.append("path")
         .attr("d", arc)
         .style("fill", function(d) { return color(keyNumber); });
-
       // add the label
       svgGroup.append("text")
         // move the label to the center of the arc, instead of the origin of the visualization
@@ -241,4 +240,9 @@ $(document).ready(function () {
   });
 });
 
-// click events on visualization
+// draw the appropriate visualization - use backbone router
+//   essentially each route just controls which visualization is active,
+//   and on each click the route will change, and then the visualization
+//   will be redrawn. ie clicking on a diff accelerator will change the route
+//   which will update state internally and then redraw the visualizations
+//   that are visible.
