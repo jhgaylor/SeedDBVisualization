@@ -43,23 +43,29 @@ var APIWrapper = {
   }
 };
 
-APIWrapper.getAccelerators().then(function (accelerators) {
-  console.log("Accelerators", accelerators);
-})
-.catch(function(err) {
-  console.log(err);
-});
+// Example usage of APIWrapper
+(function () {
+  APIWrapper.getAccelerators().then(function (accelerators) {
+    console.log("Accelerators", accelerators);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 
-APIWrapper.getAcceleratorCompanies(1011).then(function (companies) {
-  console.log("companies", companies);
-})
-.catch(function(err) {
-  console.log(err);
-});
+  APIWrapper.getAcceleratorCompanies(1011).then(function (companies) {
+    console.log("companies", companies);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 
-APIWrapper.getExits().then(function (companies) {
-  console.log("exits", companies);
-})
-.catch(function(err) {
-  console.log(err);
-});
+  APIWrapper.getExits().then(function (companies) {
+    console.log("exits", companies);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
+})() // the first comment on this line prevents the examples from running
+
+// draw the appropriate visualization - use routing?
+// click events on visualization
